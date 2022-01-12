@@ -12,12 +12,15 @@
         { x: 0, y: tileInfo.r },
         { x: tileInfo.r, y: 0 },
     ];
+    $: pointString = points.map((p) => `${p.x},${p.y}`).join(" ");
     /* https://svelte.dev/repl/c10629261a764ae4a5c11e70ed19c5c4?version=3.29.7 */
     function startDrag() {
         moving = true;
+        tileInfo.selected = true;
     }
     function stopDrag() {
         moving = false;
+        tileInfo.selected = false;
     }
     function moveDrag(event) {
         if (moving) {
@@ -26,6 +29,7 @@
                 y: tileInfo.y + event.movementY,
                 r: tileInfo.r,
                 s: tileInfo.s,
+                id: tileInfo.id,
             };
             tileInfo = newTileInfo;
         }
@@ -35,6 +39,7 @@
 <svelte:window on:mouseup={stopDrag} on:mousemove={moveDrag} />
 
 <g transform="translate({tileInfo.x} {tileInfo.y})" on:mousedown={startDrag}>
+    <polygon points={pointString} />
     {#each points as point, i}<line
             stroke="black"
             x1={point.x}
@@ -47,7 +52,11 @@
 <style>
     line {
         stroke: black;
-        stroke-width: 3px;
+        stroke-width: 5px;
         stroke-linecap: round;
+    }
+    polygon {
+        stroke: none;
+        fill: blue;
     }
 </style>

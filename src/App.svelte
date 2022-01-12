@@ -1,7 +1,20 @@
 <script>
 	import SVGTile from "./SVGTile.svelte";
 	export let name;
-	export let tiles = [{ x: 50, y: 50, s: 100, r: 20, id: 0 }];
+	export let tiles = [
+		{ x: 50, y: 50, s: 100, r: 20, id: 0, selected: false },
+	];
+	function addTile() {
+		tiles.push({
+			x: 0,
+			y: 0,
+			s: 100,
+			r: 20,
+			id: tiles.length,
+			selected: false,
+		});
+		tiles = tiles;
+	}
 </script>
 
 <main>
@@ -10,9 +23,10 @@
 		Visit the <a href="https://svelte.dev/tutorial">Svelte tutorial</a> to learn
 		how to build Svelte apps. OK!
 	</p>
-	<svg id="tiles" viewBox="0 0 1000 1000">
+	<button on:click={addTile}>New Tile</button>
+	<svg id="tiles">
 		{#each tiles as tileInfo (tileInfo.id)}
-			<SVGTile {tileInfo} />
+			<SVGTile bind:tileInfo />
 		{/each}
 	</svg>
 </main>
@@ -39,7 +53,7 @@
 	}
 
 	svg#tiles {
-		width: 50%;
-		height: 50%;
+		width: 600px;
+		height: 300px;
 	}
 </style>
